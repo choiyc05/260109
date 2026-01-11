@@ -6,16 +6,30 @@ const Page = () => {
 
     const [data, setData] = useState([]);
     const [filtereddata, setFiltereddata] = useState([]);
-
-
+    const [wordsearch, setWordsearch] = useState("");
+    
     const onSubmit = e => {
         e.preventDefault();
-        setData([...data, addword])
+        const newId = data.length + 1;
+        const newWord = { id: newId, word: addword, completed: false }
+        setData([...data, newWord])
+
+    }
+
+    const boxCheck = id => {
+        const checkUpdate = data.map(v => v.id === id ? { ...v, completed: !v.completed } : v);
+        setData(checkUpdate);
+    };
+
+    const wordDelete = id => {
+        const deleteUpdate = data.filter(v => v.id !== id);
+        setData(deleteUpdate);
     }
 
     useEffect(() => {
-        setFiltereddata(data)
-    }, [data])
+        const wordsearching = data.filter( v => v.word.toLowerCase().includes(wordsearch.toLowerCase()) );
+        setFiltereddata(wordsearching);
+    }, [data, wordsearch])
 
     return (
         <div className="word-container">
@@ -27,10 +41,10 @@ const Page = () => {
                     onChange={e => setAddword(e.target.value)} />
                 <button type="submit" className="btn btn-primary">추가</button>
             </form>
-           {/* onKeyUp=""  */}
+            {/* onKeyUp=""  */}
             {/* <!-- 검색 영역 --> */}
-            <input type="text" name="search" className="form-control mb-3" placeholder="검색어를 입력하세요" /> 
- 
+            <input type="text" name="search" className="form-control mb-3" placeholder="검색어를 입력하세요" onKeyUp={e => setWordsearch(e.target.value)} />
+
 
             {/* <!-- 목록 --> */}
             <ul className="list-group">
@@ -38,13 +52,13 @@ const Page = () => {
                 {
                     filtereddata.map((v, i) => {
                         return (
-                            <div key={i}>
-                                <li className="list-group-item d-flex justify-content-between align-items-center word-item">
+                            <div key={v.id}>
+                                <li className={`list-group-item d-flex justify-content-between align-items-center word-item ${v.completed ? "completed" : ""}`}>
                                     <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" onChange="" />
-                                        <span className="ms-2">{v}</span>
+                                        <input className="form-check-input" type="checkbox" onChange={() => boxCheck(v.id)} />
+                                        <span className="ms-2">{v.word}</span>
                                     </div>
-                                    <button type="button" className="btn btn-sm btn-outline-danger" onClick="">삭제</button>
+                                    <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => wordDelete(v.id)}>삭제</button>
                                 </li>
                             </div>)
                     })
