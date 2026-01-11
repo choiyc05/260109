@@ -27,7 +27,7 @@ const Page = () => {
     }
 
     useEffect(() => {
-        const wordsearching = data.filter( v => v.word.toLowerCase().includes(wordsearch.toLowerCase()) );
+        const wordsearching = data.filter( v => v.word.includes(wordsearch) );
         setFiltereddata(wordsearching);
     }, [data, wordsearch])
 
