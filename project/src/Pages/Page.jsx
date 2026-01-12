@@ -7,13 +7,14 @@ const Page = () => {
     const [data, setData] = useState([]);
     const [filtereddata, setFiltereddata] = useState([]);
     const [wordsearch, setWordsearch] = useState("");
+    const [makenewid, setMakenewid] = useState(0);
     
     const onSubmit = e => {
         e.preventDefault();
-        const newId = data.length + 1;
+        const newId = makenewid + 1;
         const newWord = { id: newId, word: addword, completed: false }
         setData([...data, newWord])
-
+        setMakenewid(makenewid+1);
     }
 
     const boxCheck = id => {
@@ -37,8 +38,7 @@ const Page = () => {
 
             {/* <!-- 입력 및 수정 영역 --> */}
             <form onSubmit={onSubmit} className="input-group mb-3">
-                <input type="text" name="word" className="form-control" placeholder="단어를 입력하세요" required
-                    onChange={e => setAddword(e.target.value)} />
+                <input type="text" name="word" className="form-control" placeholder="단어를 입력하세요" required onChange={e => setAddword(e.target.value)} />
                 <button type="submit" className="btn btn-primary">추가</button>
             </form>
             {/* onKeyUp=""  */}
